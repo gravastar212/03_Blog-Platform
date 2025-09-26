@@ -1,0 +1,206 @@
+<div class="post-detail-container">
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading post...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error && !isLoading">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <h3>Oops! Something went wrong</h3>
+    <p>{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Posts
+    </button>
+  </div>
+
+  <!-- Post Content -->
+  <div class="post-content" *ngIf="post && !isLoading">
+    <!-- Post Header -->
+    <div class="post-header">
+      <button mat-icon-button (click)="goBack()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      
+      <div class="post-actions" *ngIf="isAuthenticated">
+        <button 
+          mat-icon-button 
+          *ngIf="canEditPost()"
+          (click)="editPost()"
+          matTooltip="Edit Post">
+          <mat-icon>edit</mat-icon>
+        </button>
+        
+        <button 
+          mat-icon-button 
+          *ngIf="canDeletePost()"
+          (click)="deletePost()"
+          matTooltip="Delete Post">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Post Card -->
+    <mat-card class="post-card mat-elevation-z4">
+      <mat-card-header class="post-card-header">
+        <div class="post-meta">
+          <span class="post-status" [ngClass]="'status-' + post.status.toLowerCase()">
+            <mat-icon [color]="getStatusColor(post.status)">
+              {{ getStatusIcon(post.status) }}
+            </mat-icon>
+            {{ post.status }}
+          </span>
+          <span class="post-date">{{ formatDate(post.createdAt) }}</span>
+        </div>
+        
+        <mat-card-title class="post-title">{{ post.title }}</mat-card-title>
+        
+        <mat-card-subtitle class="post-author">
+          <mat-icon>person</mat-icon>
+          {{ post.author.name }}
+          <span class="author-role">({{ post.author.role }})</span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="post-card-content">
+        <div class="post-body" [innerHTML]="post.content"></div>
+      </mat-card-content>
+
+      <mat-card-actions class="post-card-actions" *ngIf="post.updatedAt !== post.createdAt">
+        <span class="last-updated">
+          <mat-icon>update</mat-icon>
+          Last updated: {{ formatDate(post.updatedAt) }}
+        </span>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Comments Section -->
+    <div class="comments-section">
+      <div class="comments-header">
+        <h2>
+          <mat-icon>comment</mat-icon>
+          Comments ({{ totalComments }})
+        </h2>
+      </div>
+
+      <!-- Add Comment Form -->
+      <mat-card class="comment-form-card" *ngIf="isAuthenticated">
+        <mat-card-content>
+          <form [formGroup]="commentForm" (ngSubmit)="onSubmitComment()">
+            <mat-form-field appearance="outline" class="comment-field">
+              <mat-label>Add a comment</mat-label>
+              <textarea 
+                matInput 
+                formControlName="content"
+                placeholder="Share your thoughts..."
+                rows="3"
+                maxlength="1000">
+              </textarea>
+              <mat-hint align="end">{{ commentForm.get('content')?.value?.length || 0 }}/1000</mat-hint>
+            </mat-form-field>
+            
+            <div class="comment-form-actions">
+              <button 
+                mat-raised-button 
+                color="primary" 
+                type="submit"
+                [disabled]="commentForm.invalid || isSubmittingComment">
+                <mat-icon *ngIf="isSubmittingComment" class="spinning">refresh</mat-icon>
+                <span>{{ isSubmittingComment ? 'Posting...' : 'Post Comment' }}</span>
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Login Prompt for Comments -->
+      <mat-card class="login-prompt-card" *ngIf="!isAuthenticated">
+        <mat-card-content>
+          <div class="login-prompt">
+            <mat-icon>login</mat-icon>
+            <p>Please log in to add comments</p>
+            <button mat-raised-button color="primary" routerLink="/login">
+              <mat-icon>login</mat-icon>
+              Login
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Comments List -->
+      <div class="comments-list" *ngIf="comments.length > 0">
+        <mat-list class="comments-mat-list">
+          <mat-list-item *ngFor="let comment of comments; trackBy: trackByCommentId" class="comment-item">
+            <div class="comment-content">
+              <!-- Comment Header -->
+              <div class="comment-header">
+                <div class="comment-author">
+                  <mat-icon matListItemIcon>account_circle</mat-icon>
+                  <div class="author-info">
+                    <span class="author-name">{{ comment.user.name }}</span>
+                    <span class="author-role">{{ comment.user.role }}</span>
+                  </div>
+                </div>
+                
+                <div class="comment-meta">
+                  <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+                  
+                  <div class="comment-actions" *ngIf="isAuthenticated">
+                    <button 
+                      mat-icon-button 
+                      *ngIf="canDeleteComment(comment)"
+                      (click)="deleteComment(comment)"
+                      matTooltip="Delete Comment">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Comment Body -->
+              <div class="comment-body">
+                <p>{{ comment.content }}</p>
+              </div>
+
+              <!-- Comment Footer -->
+              <div class="comment-footer" *ngIf="comment.updatedAt !== comment.createdAt">
+                <span class="comment-edited">
+                  <mat-icon>edit</mat-icon>
+                  Edited {{ formatDate(comment.updatedAt) }}
+                </span>
+              </div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+
+      <!-- Empty Comments State -->
+      <div class="empty-comments" *ngIf="comments.length === 0 && !isLoading">
+        <mat-icon class="empty-icon">comment</mat-icon>
+        <h3>No comments yet</h3>
+        <p>Be the first to share your thoughts!</p>
+      </div>
+
+      <!-- Load More Comments Button -->
+      <div class="load-more-comments" *ngIf="hasMoreComments && comments.length > 0">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="loadMoreComments()"
+          [disabled]="isLoadingComments">
+          <mat-icon *ngIf="isLoadingComments" class="spinning">refresh</mat-icon>
+          <span>{{ isLoadingComments ? 'Loading...' : 'Load More Comments' }}</span>
+        </button>
+      </div>
+
+      <!-- Loading More Comments Indicator -->
+      <div class="loading-more-comments" *ngIf="isLoadingComments && comments.length > 0">
+        <mat-spinner diameter="30"></mat-spinner>
+        <span>Loading more comments...</span>
+      </div>
+    </div>
+  </div>
+</div>
