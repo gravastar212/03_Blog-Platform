@@ -5,6 +5,7 @@ import { GlobalExceptionFilter } from './filters/global-exception.filter';
 @Global()
 @Module({
   providers: [
+    GlobalExceptionFilter,
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
