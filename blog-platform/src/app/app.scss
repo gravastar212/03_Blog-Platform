@@ -1,0 +1,12 @@
+.main-content {
+  margin-top: 64px; // Account for fixed navbar height
+  min-height: calc(100vh - 64px);
+  padding: 24px;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .main-content {
+    padding: 16px;
+  }
+}

@@ -1,0 +1,43 @@
+<mat-toolbar color="primary" class="navbar">
+  <span class="app-title">{{ title }}</span>
+
+  <span class="spacer"></span>
+
+  <div class="desktop-nav">
+    @for (item of navItems; track item.name) {
+      <a mat-button [routerLink]="item.route" routerLinkActive="active">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        {{ item.name }}
+      </a>
+    }
+  </div>
+
+  <div class="auth-section">
+    <!-- Login Button (when not logged in) -->
+    @if (!isLoggedIn) {
+      <button mat-button (click)="onLogin()" class="login-button">
+        <mat-icon>login</mat-icon>
+        <span>Login</span>
+      </button>
+    }
+
+    <!-- User Menu (when logged in) -->
+    @if (isLoggedIn) {
+      <div class="user-menu">
+        <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-button">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+
+        <mat-menu #userMenu="matMenu" class="user-dropdown">
+          <!-- Menu Items -->
+          @for (item of userMenuItems; track item.name) {
+            <button mat-menu-item (click)="handleUserAction(item)">
+              <mat-icon>{{ item.icon }}</mat-icon>
+              <span>{{ item.name }}</span>
+            </button>
+          }
+        </mat-menu>
+      </div>
+    }
+  </div>
+</mat-toolbar>
