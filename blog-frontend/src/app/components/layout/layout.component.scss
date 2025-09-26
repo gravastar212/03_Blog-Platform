@@ -1,0 +1,116 @@
+.layout-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidenav-container {
+  flex: 1;
+}
+
+.sidenav {
+  width: 250px;
+  box-shadow: 3px 0 6px rgba(0, 0, 0, 0.24);
+}
+
+.sidenav-toolbar {
+  background-color: #3f51b5;
+  color: white;
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 0 16px;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.app-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-left: 16px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.content-wrapper {
+  flex: 1;
+  padding: 24px;
+  background-color: #fafafa;
+  min-height: calc(100vh - 64px);
+}
+
+// Responsive adjustments
+@media (max-width: 599px) {
+  .content-wrapper {
+    padding: 16px;
+  }
+  
+  .toolbar-title {
+    font-size: 1rem;
+    margin-left: 8px;
+  }
+}
+
+// Dark theme support
+@media (prefers-color-scheme: dark) {
+  .content-wrapper {
+    background-color: #303030;
+  }
+}
+
+// Material Design elevation
+.mat-sidenav {
+  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 
+              0 16px 24px 2px rgba(0, 0, 0, 0.14), 
+              0 6px 30px 5px rgba(0, 0, 0, 0.12);
+}
+
+// Navigation list styling
+mat-nav-list {
+  padding-top: 0;
+}
+
+mat-list-item {
+  margin: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+mat-list-item:hover {
+  background-color: rgba(63, 81, 181, 0.04);
+}
+
+mat-list-item.active {
+  background-color: rgba(63, 81, 181, 0.12);
+  color: #3f51b5;
+}
+
+// Icon styling
+mat-icon {
+  margin-right: 16px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+mat-list-item.active mat-icon {
+  color: #3f51b5;
+}
