@@ -1,0 +1,256 @@
+.create-post-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.create-post-header {
+  text-align: center;
+  margin-bottom: 32px;
+  
+  h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #3f51b5;
+    margin-bottom: 8px;
+    
+    mat-icon {
+      font-size: 2.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: #666;
+    margin: 0;
+  }
+}
+
+.create-post-card {
+  margin-bottom: 24px;
+  
+  .title-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .content-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .status-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  
+  .action-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+    button {
+      min-width: 120px;
+    }
+  }
+}
+
+.status-option {
+  display: flex;
+  flex-direction: column;
+  
+  .status-label {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .status-description {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 2px;
+  }
+}
+
+.preview-card {
+  .preview-content {
+    .preview-title {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    
+    .preview-body {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #555;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin-bottom: 16px;
+    }
+    
+    .preview-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #eee;
+      
+      .preview-author {
+        font-weight: 500;
+        color: #333;
+      }
+      
+      .preview-date {
+        font-size: 0.9rem;
+        color: #666;
+      }
+      
+      .preview-status {
+        font-size: 0.8rem;
+        font-weight: 500;
+        padding: 4px 8px;
+        border-radius: 12px;
+        
+        &.status-published {
+          background-color: #e8f5e8;
+          color: #2e7d32;
+        }
+        
+        &.status-draft {
+          background-color: #fff3e0;
+          color: #f57c00;
+        }
+      }
+    }
+  }
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .create-post-container {
+    padding: 16px;
+  }
+  
+  .create-post-header {
+    h1 {
+      font-size: 2rem;
+      
+      mat-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+  }
+  
+  .form-actions {
+    .action-buttons {
+      flex-direction: column;
+      align-items: center;
+      
+      button {
+        width: 100%;
+        max-width: 200px;
+      }
+    }
+  }
+}
+
+@media (max-width: 599px) {
+  .create-post-container {
+    padding: 12px;
+  }
+  
+  .create-post-header {
+    h1 {
+      font-size: 1.8rem;
+      
+      mat-icon {
+        font-size: 1.8rem;
+        width: 1.8rem;
+        height: 1.8rem;
+      }
+    }
+  }
+  
+  .preview-card {
+    .preview-content {
+      .preview-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
+  }
+}
+
+// Dark theme support
+@media (prefers-color-scheme: dark) {
+  .create-post-header {
+    h1 {
+      color: #7986cb;
+    }
+    
+    p {
+      color: #ccc;
+    }
+  }
+  
+  .status-option {
+    .status-label {
+      color: #fff;
+    }
+    
+    .status-description {
+      color: #ccc;
+    }
+  }
+  
+  .preview-card {
+    .preview-content {
+      .preview-title {
+        color: #fff;
+      }
+      
+      .preview-body {
+        color: #ccc;
+      }
+      
+      .preview-meta {
+        border-top-color: #555;
+        
+        .preview-author {
+          color: #fff;
+        }
+        
+        .preview-date {
+          color: #ccc;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,127 @@
+<div class="admin-container">
+  <!-- Header Section -->
+  <div class="admin-header">
+    <h1>
+      <mat-icon>admin_panel_settings</mat-icon>
+      Admin Panel
+    </h1>
+    <p class="welcome-message">{{ getWelcomeMessage() }}</p>
+    <p class="current-time">{{ getCurrentTime() }}</p>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading statistics...</p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="statistics-section" *ngIf="!isLoading">
+    <h2>Site Statistics</h2>
+    <div class="stats-grid">
+      <mat-card class="stat-card mat-elevation-z2">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon">article</mat-icon>
+            <div class="stat-details">
+              <span class="stat-number">{{ totalPosts }}</span>
+              <span class="stat-label">Total Posts</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card mat-elevation-z2">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon">comment</mat-icon>
+            <div class="stat-details">
+              <span class="stat-number">{{ totalComments }}</span>
+              <span class="stat-label">Total Comments</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card mat-elevation-z2">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon">people</mat-icon>
+            <div class="stat-details">
+              <span class="stat-number">{{ totalUsers }}</span>
+              <span class="stat-label">Total Users</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card mat-elevation-z2">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon">trending_up</mat-icon>
+            <div class="stat-details">
+              <span class="stat-number">{{ recentPosts }}</span>
+              <span class="stat-label">Recent Posts</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Admin Menu -->
+  <div class="admin-menu-section">
+    <h2>Administrative Functions</h2>
+    <div class="menu-grid">
+      <mat-card 
+        *ngFor="let item of adminMenuItems" 
+        class="menu-card mat-elevation-z2"
+        [routerLink]="item.route">
+        <mat-card-content>
+          <div class="menu-content">
+            <mat-icon class="menu-icon" [color]="item.color">{{ item.icon }}</mat-icon>
+            <div class="menu-details">
+              <h3 class="menu-title">{{ item.title }}</h3>
+              <p class="menu-description">{{ item.description }}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions-section">
+    <h2>Quick Actions</h2>
+    <div class="actions-list">
+      <mat-list>
+        <mat-list-item>
+          <mat-icon matListItemIcon>add</mat-icon>
+          <div matListItemTitle>Create New Post</div>
+          <div matListItemLine>Create a new blog post</div>
+          <button mat-icon-button matListItemMeta routerLink="/posts/create">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>people</mat-icon>
+          <div matListItemTitle>Manage Users</div>
+          <div matListItemLine>View and manage user accounts</div>
+          <button mat-icon-button matListItemMeta routerLink="/admin/users">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>report</mat-icon>
+          <div matListItemTitle>View Reports</div>
+          <div matListItemLine>Check site reports and analytics</div>
+          <button mat-icon-button matListItemMeta routerLink="/admin/analytics">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+</div>

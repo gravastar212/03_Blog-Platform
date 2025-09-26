@@ -1,0 +1,305 @@
+.unauthorized-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  background-color: #fafafa;
+}
+
+.unauthorized-card {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.card-header {
+  .icon-container {
+    margin-bottom: 16px;
+    
+    .error-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      color: #f44336;
+    }
+  }
+  
+  .error-title {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  .error-subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 24px;
+  }
+}
+
+.card-content {
+  .error-details {
+    text-align: left;
+    margin-bottom: 24px;
+    
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 12px;
+    }
+    
+    .role-info {
+      margin-bottom: 16px;
+      
+      .roles-list {
+        .role-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px;
+          background-color: #f5f5f5;
+          border-radius: 8px;
+          margin-bottom: 8px;
+          
+          .role-icon {
+            color: #3f51b5;
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+          }
+          
+          .role-details {
+            display: flex;
+            flex-direction: column;
+            
+            .role-name {
+              font-weight: 500;
+              color: #333;
+              margin-bottom: 4px;
+            }
+            
+            .role-description {
+              font-size: 0.9rem;
+              color: #666;
+            }
+          }
+        }
+      }
+    }
+    
+    .user-info {
+      margin-bottom: 16px;
+      
+      .user-role {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background-color: #e8f5e8;
+        border-radius: 8px;
+        
+        .user-icon {
+          color: #2e7d32;
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+        
+        .user-details {
+          display: flex;
+          flex-direction: column;
+          
+          .user-role-name {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+          }
+          
+          .user-role-description {
+            font-size: 0.9rem;
+            color: #666;
+          }
+        }
+      }
+    }
+    
+    .attempted-url {
+      .url-display {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background-color: #fff3e0;
+        border-radius: 4px;
+        font-family: monospace;
+        
+        .url-icon {
+          color: #f57c00;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+        
+        .url-text {
+          color: #333;
+          font-size: 0.9rem;
+          word-break: break-all;
+        }
+      }
+    }
+  }
+  
+  .help-text {
+    text-align: center;
+    
+    p {
+      color: #666;
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+}
+
+.card-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  
+  button {
+    min-width: 120px;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .unauthorized-container {
+    padding: 16px;
+  }
+  
+  .card-header {
+    .error-title {
+      font-size: 1.5rem;
+    }
+    
+    .error-subtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  .card-content {
+    .error-details {
+      h3 {
+        font-size: 1.1rem;
+      }
+    }
+  }
+  
+  .card-actions {
+    flex-direction: column;
+    align-items: center;
+    
+    button {
+      width: 100%;
+      max-width: 200px;
+    }
+  }
+}
+
+@media (max-width: 599px) {
+  .unauthorized-container {
+    padding: 12px;
+  }
+  
+  .card-header {
+    .icon-container {
+      .error-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+      }
+    }
+    
+    .error-title {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+// Dark theme support
+@media (prefers-color-scheme: dark) {
+  .unauthorized-container {
+    background-color: #303030;
+  }
+  
+  .card-header {
+    .error-title {
+      color: #fff;
+    }
+    
+    .error-subtitle {
+      color: #ccc;
+    }
+  }
+  
+  .card-content {
+    .error-details {
+      h3 {
+        color: #fff;
+      }
+      
+      .role-info {
+        .roles-list {
+          .role-item {
+            background-color: #424242;
+            
+            .role-details {
+              .role-name {
+                color: #fff;
+              }
+              
+              .role-description {
+                color: #ccc;
+              }
+            }
+          }
+        }
+      }
+      
+      .user-info {
+        .user-role {
+          background-color: #2e7d32;
+          
+          .user-details {
+            .user-role-name {
+              color: #fff;
+            }
+            
+            .user-role-description {
+              color: #ccc;
+            }
+          }
+        }
+      }
+      
+      .attempted-url {
+        .url-display {
+          background-color: #f57c00;
+          
+          .url-text {
+            color: #fff;
+          }
+        }
+      }
+    }
+    
+    .help-text {
+      p {
+        color: #ccc;
+      }
+    }
+  }
+}
