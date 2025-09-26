@@ -14,6 +14,7 @@ import {
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { CommentResponseDto } from './dto/comment-response.dto';
 import { Comment } from './entities/comment.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -31,30 +32,42 @@ export class CommentsController {
   async create(
     @Body() createCommentDto: CreateCommentDto,
     @Request() req: { user: User },
-  ): Promise<Comment> {
-    return this.commentsService.create(createCommentDto, req.user);
+  ): Promise<CommentResponseDto> {
+    const comment = await this.commentsService.create(
+      createCommentDto,
+      req.user,
+    );
+    return new CommentResponseDto(comment);
   }
 
   @Get()
-  async findAll(): Promise<Comment[]> {
-    return this.commentsService.findAll();
+  async findAll(): Promise<CommentResponseDto[]> {
+    const comments = await this.commentsService.findAll();
+    return comments.map((comment) => new CommentResponseDto(comment));
   }
 
   @Get('my-comments')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.USER, UserRole.ADMIN)
-  async findMyComments(@Request() req: { user: User }): Promise<Comment[]> {
-    return this.commentsService.findByUser(req.user.id);
+  async findMyComments(
+    @Request() req: { user: User },
+  ): Promise<CommentResponseDto[]> {
+    const comments = await this.commentsService.findByUser(req.user.id);
+    return comments.map((comment) => new CommentResponseDto(comment));
   }
 
   @Get('post/:postId')
-  async findByPost(@Param('postId') postId: string): Promise<Comment[]> {
-    return this.commentsService.findByPost(postId);
+  async findByPost(
+    @Param('postId') postId: string,
+  ): Promise<CommentResponseDto[]> {
+    const comments = await this.commentsService.findByPost(postId);
+    return comments.map((comment) => new CommentResponseDto(comment));
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Comment> {
-    return this.commentsService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<CommentResponseDto> {
+    const comment = await this.commentsService.findOne(id);
+    return new CommentResponseDto(comment);
   }
 
   @Patch(':id')
@@ -64,8 +77,13 @@ export class CommentsController {
     @Param('id') id: string,
     @Body() updateCommentDto: UpdateCommentDto,
     @Request() req: { user: User },
-  ): Promise<Comment> {
-    return this.commentsService.update(id, updateCommentDto, req.user);
+  ): Promise<CommentResponseDto> {
+    const comment = await this.commentsService.update(
+      id,
+      updateCommentDto,
+      req.user,
+    );
+    return new CommentResponseDto(comment);
   }
 
   @Delete(':id')
