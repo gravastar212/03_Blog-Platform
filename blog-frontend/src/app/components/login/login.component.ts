@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   hidePassword = true;
   isLoading = false;
-  returnUrl = '/home';
+  returnUrl = '/posts';
   sessionExpired = false;
 
   constructor(
@@ -53,8 +53,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Get return URL from route parameters or default to '/home'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+    // Get return URL from route parameters or default to '/posts'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/posts';
     
     // Check if user was redirected due to session expiration
     this.sessionExpired = this.route.snapshot.queryParams['reason'] === 'session_expired';
@@ -87,7 +87,7 @@ export class LoginComponent implements OnInit {
             verticalPosition: 'top'
           });
           
-          // Redirect to return URL or home page after successful login
+          // Redirect to return URL or posts page after successful login
           this.router.navigate([this.returnUrl]);
         },
         error: (error) => {
