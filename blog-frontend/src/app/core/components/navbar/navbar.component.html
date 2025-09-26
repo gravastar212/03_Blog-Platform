@@ -50,6 +50,14 @@
       </button>
       
       <mat-menu #userMenu="matMenu" class="user-dropdown">
+        <!-- User Info Header -->
+        <div class="user-info-header" *ngIf="currentUser">
+          <div class="user-name">{{ currentUser.name }}</div>
+          <div class="user-email">{{ currentUser.email }}</div>
+        </div>
+        <mat-divider></mat-divider>
+        
+        <!-- Menu Items -->
         <button mat-menu-item *ngFor="let item of userMenuItems" (click)="handleUserAction(item)">
           <mat-icon>{{ item.icon }}</mat-icon>
           <span>{{ item.name }}</span>

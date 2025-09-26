@@ -97,6 +97,23 @@
 }
 
 .user-dropdown {
+  .user-info-header {
+    padding: 16px;
+    background-color: #f5f5f5;
+    
+    .user-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    
+    .user-email {
+      font-size: 0.8rem;
+      color: #666;
+    }
+  }
+  
   .mat-mdc-menu-item {
     display: flex;
     align-items: center;

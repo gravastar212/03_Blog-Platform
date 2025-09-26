@@ -1,14 +1,16 @@
-import { Component, inject, Output, EventEmitter } from '@angular/core';
+import { Component, inject, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDividerModule } from '@angular/material/divider';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
+import { RouterModule, Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { AuthService, User } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -20,13 +22,15 @@ import { map, shareReplay } from 'rxjs/operators';
     MatIconModule,
     MatMenuModule,
     MatSidenavModule,
+    MatDividerModule,
     RouterModule
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit, OnDestroy {
   private breakpointObserver = inject(BreakpointObserver);
+  private authSubscription?: Subscription;
 
   @Output() toggleSidenav = new EventEmitter<void>();
 
@@ -49,7 +53,27 @@ export class NavbarComponent {
     { name: 'Logout', icon: 'logout', action: 'logout' }
   ];
 
-  isLoggedIn = false; // This should come from auth service
+  currentUser: User | null = null;
+  isLoggedIn = false;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    // Subscribe to authentication state changes
+    this.authSubscription = this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+      this.isLoggedIn = !!user;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }
 
   onToggleSidenav(): void {
     this.toggleSidenav.emit();
@@ -57,18 +81,13 @@ export class NavbarComponent {
 
   handleUserAction(item: any): void {
     if (item.action === 'logout') {
-      // Handle logout logic here
-      console.log('Logout clicked');
-      this.isLoggedIn = false;
+      this.authService.logout();
     } else if (item.route) {
-      // Handle navigation to route
-      console.log(`Navigate to: ${item.route}`);
+      this.router.navigate([item.route]);
     }
   }
 
   onLogin(): void {
-    // Handle login logic here
-    console.log('Login clicked');
-    this.isLoggedIn = true;
+    this.router.navigate(['/login']);
   }
 }
