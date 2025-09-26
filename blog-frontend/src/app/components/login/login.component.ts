@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { AuthService, LoginRequest } from '../../services/auth.service';
 
 @Component({
@@ -31,15 +31,18 @@ import { AuthService, LoginRequest } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   hidePassword = true;
   isLoading = false;
+  returnUrl = '/home';
+  sessionExpired = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
@@ -47,6 +50,23 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false]
     });
+  }
+
+  ngOnInit(): void {
+    // Get return URL from route parameters or default to '/home'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+    
+    // Check if user was redirected due to session expiration
+    this.sessionExpired = this.route.snapshot.queryParams['reason'] === 'session_expired';
+    
+    if (this.sessionExpired) {
+      this.snackBar.open('Your session has expired. Please log in again.', 'Close', {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['warning-snackbar']
+      });
+    }
   }
 
   onSubmit(): void {
@@ -67,8 +87,8 @@ export class LoginComponent {
             verticalPosition: 'top'
           });
           
-          // Redirect to home page after successful login
-          this.router.navigate(['/home']);
+          // Redirect to return URL or home page after successful login
+          this.router.navigate([this.returnUrl]);
         },
         error: (error) => {
           this.isLoading = false;

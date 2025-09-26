@@ -37,6 +37,25 @@
     color: rgba(255, 255, 255, 0.8);
     font-size: 1rem;
   }
+  
+  .session-expired-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 8px 12px;
+    background-color: rgba(255, 193, 7, 0.2);
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    border-radius: 4px;
+    color: #ffc107;
+    font-size: 0.9rem;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
 }
 
 .login-content {
