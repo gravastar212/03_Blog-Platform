@@ -1,79 +1,161 @@
 <div class="posts-container">
+  <!-- Header Section -->
   <div class="posts-header">
     <h1>Blog Posts</h1>
-    <p>Discover amazing content from our community</p>
-    
-    <div class="posts-actions">
-      <button mat-raised-button color="primary" routerLink="/posts/create">
-        <mat-icon>add</mat-icon>
-        Create New Post
+    <p>Discover the latest articles and insights</p>
+  </div>
+
+  <!-- Search and Filter Section -->
+  <div class="search-filter-section">
+    <div class="search-controls">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search posts</mat-label>
+        <input 
+          matInput 
+          [formControl]="searchControl"
+          placeholder="Search by title, content, or author..."
+          (keyup.enter)="onSearch()">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="status-field">
+        <mat-label>Status</mat-label>
+        <mat-select [formControl]="statusControl" (selectionChange)="onStatusChange()">
+          <mat-option value="all">All Posts</mat-option>
+          <mat-option value="PUBLISHED">Published</mat-option>
+          <mat-option value="DRAFT">Drafts</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button 
+        mat-raised-button 
+        color="primary" 
+        (click)="refreshPosts()"
+        [disabled]="isLoading">
+        <mat-icon>refresh</mat-icon>
+        Refresh
       </button>
     </div>
   </div>
 
-  <div class="posts-content">
-    <!-- Search and Filter Section -->
-    <mat-card class="search-card">
-      <mat-card-content>
-        <div class="search-section">
-          <mat-form-field appearance="outline" class="search-field">
-            <mat-label>Search posts</mat-label>
-            <input matInput placeholder="Search by title or content...">
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
-          
-          <mat-form-field appearance="outline" class="filter-field">
-            <mat-label>Filter by category</mat-label>
-            <mat-select>
-              <mat-option value="all">All Categories</mat-option>
-              <mat-option value="technology">Technology</mat-option>
-              <mat-option value="lifestyle">Lifestyle</mat-option>
-              <mat-option value="travel">Travel</mat-option>
-              <mat-option value="food">Food</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </mat-card-content>
-    </mat-card>
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="isLoading && posts.length === 0">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading posts...</p>
+  </div>
 
-    <!-- Posts Grid -->
-    <div class="posts-grid">
-      <!-- Sample Post Cards -->
-      <mat-card class="post-card" *ngFor="let post of samplePosts">
-        <mat-card-header>
-          <div mat-card-avatar class="author-avatar">
-            <mat-icon>person</mat-icon>
-          </div>
-          <mat-card-title>{{ post.title }}</mat-card-title>
-          <mat-card-subtitle>By {{ post.author }} • {{ post.date }}</mat-card-subtitle>
-        </mat-card-header>
-        
-        <mat-card-content>
-          <p class="post-excerpt">{{ post.excerpt }}</p>
-          <div class="post-tags">
-            <mat-chip-listbox>
-              <mat-chip *ngFor="let tag of post.tags">{{ tag }}</mat-chip>
-            </mat-chip-listbox>
-          </div>
-        </mat-card-content>
-        
-        <mat-card-actions>
-          <button mat-button color="primary">Read More</button>
-          <button mat-icon-button>
-            <mat-icon>favorite_border</mat-icon>
-          </button>
-          <button mat-icon-button>
-            <mat-icon>share</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error && !isLoading">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <h3>Oops! Something went wrong</h3>
+    <p>{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="refreshPosts()">
+      <mat-icon>refresh</mat-icon>
+      Try Again
+    </button>
+  </div>
 
-    <!-- Load More Button -->
-    <div class="load-more-section">
-      <button mat-raised-button color="accent" class="load-more-btn">
-        Load More Posts
-      </button>
-    </div>
+  <!-- Posts Grid -->
+  <div class="posts-grid" *ngIf="!isLoading || posts.length > 0">
+    <mat-grid-list 
+      [cols]="cols | async" 
+      rowHeight="400px" 
+      gutterSize="16px"
+      class="posts-grid-list">
+      
+      <mat-grid-tile *ngFor="let post of filteredPosts; trackBy: trackByPostId">
+        <mat-card class="post-card mat-elevation-z2">
+          <!-- Post Header -->
+          <mat-card-header class="post-header">
+            <div class="post-meta">
+              <span class="post-status" [ngClass]="'status-' + post.status.toLowerCase()">
+                <mat-icon [color]="getStatusColor(post.status)">
+                  {{ getStatusIcon(post.status) }}
+                </mat-icon>
+                {{ post.status }}
+              </span>
+              <span class="post-date">{{ formatDate(post.createdAt) }}</span>
+            </div>
+            <mat-card-title class="post-title">{{ post.title }}</mat-card-title>
+            <mat-card-subtitle class="post-author">
+              <mat-icon>person</mat-icon>
+              {{ post.author.name }}
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <!-- Post Content -->
+          <mat-card-content class="post-content">
+            <p class="post-excerpt">{{ getPostExcerpt(post.content) }}</p>
+          </mat-card-content>
+
+          <!-- Post Actions -->
+          <mat-card-actions class="post-actions">
+            <button 
+              mat-button 
+              color="primary" 
+              [routerLink]="['/posts', post.id]">
+              <mat-icon>read_more</mat-icon>
+              Read More
+            </button>
+            
+            <div class="action-buttons" *ngIf="isAuthenticated">
+              <button 
+                mat-icon-button 
+                *ngIf="canEditPost(post)"
+                [routerLink]="['/posts', post.id, 'edit']"
+                matTooltip="Edit Post">
+                <mat-icon>edit</mat-icon>
+              </button>
+              
+              <button 
+                mat-icon-button 
+                *ngIf="canDeletePost(post)"
+                (click)="deletePost(post)"
+                matTooltip="Delete Post">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && filteredPosts.length === 0 && !error">
+    <mat-icon class="empty-icon">article</mat-icon>
+    <h3>No posts found</h3>
+    <p *ngIf="searchControl.value || statusControl.value !== 'all'">
+      Try adjusting your search criteria or filters.
+    </p>
+    <p *ngIf="!searchControl.value && statusControl.value === 'all'">
+      No posts have been published yet.
+    </p>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      *ngIf="isAuthenticated"
+      routerLink="/posts/create">
+      <mat-icon>add</mat-icon>
+      Create First Post
+    </button>
+  </div>
+
+  <!-- Load More Button -->
+  <div class="load-more-container" *ngIf="!isLoading && filteredPosts.length > 0 && filteredPosts.length < totalPosts">
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="loadMorePosts()"
+      [disabled]="isLoading">
+      <mat-icon>expand_more</mat-icon>
+      Load More Posts
+    </button>
+  </div>
+
+  <!-- Loading More Indicator -->
+  <div class="loading-more" *ngIf="isLoading && posts.length > 0">
+    <mat-spinner diameter="30"></mat-spinner>
+    <span>Loading more posts...</span>
   </div>
 </div>
