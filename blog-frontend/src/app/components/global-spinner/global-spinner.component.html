@@ -1,0 +1,17 @@
+<!-- Global Loading Spinner -->
+<div class="global-spinner-overlay" *ngIf="isLoading">
+  <div class="spinner-container">
+    <mat-spinner diameter="50" color="primary"></mat-spinner>
+    <p class="loading-text">Loading...</p>
+    <!-- Debug info (only in development) -->
+    <p class="debug-info" *ngIf="loadingCount > 0">Active requests: {{ loadingCount }}</p>
+  </div>
+</div>
+
+<!-- Top Progress Bar (Alternative) -->
+<!-- Uncomment this if you prefer a top progress bar instead of spinner -->
+<!--
+<div class="top-progress-bar" *ngIf="isLoading">
+  <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
+</div>
+-->
