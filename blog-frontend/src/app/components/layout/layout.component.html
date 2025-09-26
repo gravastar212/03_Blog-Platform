@@ -1,63 +1,19 @@
 <div class="layout-container">
-  <mat-sidenav-container class="sidenav-container">
-    <!-- Side Navigation -->
-    <mat-sidenav 
-      #drawer 
-      class="sidenav" 
-      fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
-      
-      <mat-toolbar class="sidenav-toolbar">
-        <span class="app-title">Blog Platform</span>
-      </mat-toolbar>
-      
-      <mat-nav-list>
-        <a mat-list-item 
-           *ngFor="let item of menuItems" 
-           [routerLink]="item.route"
-           (click)="drawer.close()">
-          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-          <span matListItemTitle>{{ item.name }}</span>
-        </a>
-      </mat-nav-list>
-    </mat-sidenav>
+  <!-- Navbar -->
+  <app-navbar (toggleSidenav)="onToggleSidenav()"></app-navbar>
 
-    <!-- Main Content -->
-    <mat-sidenav-content class="main-content">
-      <!-- Top Toolbar -->
-      <mat-toolbar color="primary" class="main-toolbar">
-        <button
-          type="button"
-          aria-label="Toggle sidenav"
-          mat-icon-button
-          (click)="drawer.toggle()"
-          *ngIf="isHandset$ | async">
-          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-        </button>
-        
-        <span class="toolbar-title">Blog Platform</span>
-        
-        <span class="spacer"></span>
-        
-        <!-- User Menu -->
-        <button mat-icon-button [matMenuTriggerFor]="userMenu">
-          <mat-icon>account_circle</mat-icon>
-        </button>
-        
-        <mat-menu #userMenu="matMenu">
-          <button mat-menu-item *ngFor="let item of userMenuItems" (click)="handleUserAction(item)">
-            <mat-icon>{{ item.icon }}</mat-icon>
-            <span>{{ item.name }}</span>
-          </button>
-        </mat-menu>
-      </mat-toolbar>
+  <!-- Sidenav with Main Content -->
+  <app-sidenav 
+    [opened]="sidenavOpened"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    (closeSidenav)="onCloseSidenav()">
+    
+    <!-- Page Content -->
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </app-sidenav>
 
-      <!-- Page Content -->
-      <div class="content-wrapper">
-        <router-outlet></router-outlet>
-      </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+  <!-- Footer -->
+  <app-footer></app-footer>
 </div>

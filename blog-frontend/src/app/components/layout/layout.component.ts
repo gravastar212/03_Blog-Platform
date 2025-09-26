@@ -1,29 +1,22 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { RouterOutlet, RouterModule } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { NavbarComponent } from '../../core/components/navbar/navbar.component';
+import { SidenavComponent } from '../../core/components/sidenav/sidenav.component';
+import { FooterComponent } from '../../core/components/footer/footer.component';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
   imports: [
     CommonModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    MatMenuModule,
     RouterOutlet,
-    RouterModule
+    NavbarComponent,
+    SidenavComponent,
+    FooterComponent
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
@@ -37,27 +30,13 @@ export class LayoutComponent {
       shareReplay()
     );
 
-  menuItems = [
-    { name: 'Home', icon: 'home', route: '/home' },
-    { name: 'Posts', icon: 'article', route: '/posts' },
-    { name: 'Create Post', icon: 'add', route: '/posts/create' },
-    { name: 'My Posts', icon: 'person', route: '/posts/my-posts' },
-    { name: 'Profile', icon: 'account_circle', route: '/profile' },
-  ];
+  sidenavOpened = false;
 
-  userMenuItems = [
-    { name: 'Profile', icon: 'person', route: '/profile' },
-    { name: 'Settings', icon: 'settings', route: '/settings' },
-    { name: 'Logout', icon: 'logout', action: 'logout' }
-  ];
+  onToggleSidenav(): void {
+    this.sidenavOpened = !this.sidenavOpened;
+  }
 
-  handleUserAction(item: any): void {
-    if (item.action === 'logout') {
-      // Handle logout logic here
-      console.log('Logout clicked');
-    } else if (item.route) {
-      // Handle navigation to route
-      console.log(`Navigate to: ${item.route}`);
-    }
+  onCloseSidenav(): void {
+    this.sidenavOpened = false;
   }
 }

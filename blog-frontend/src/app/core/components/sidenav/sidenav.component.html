@@ -1,0 +1,69 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav 
+    #drawer 
+    class="sidenav" 
+    fixedInViewport
+    [attr.role]="mode === 'over' ? 'dialog' : 'navigation'"
+    [mode]="mode"
+    [opened]="opened">
+    
+    <!-- Sidenav Header -->
+    <div class="sidenav-header">
+      <div class="header-content">
+        <mat-icon class="header-icon">article</mat-icon>
+        <span class="header-title">Blog Platform</span>
+      </div>
+      <button 
+        mat-icon-button 
+        (click)="onCloseSidenav()"
+        *ngIf="mode === 'over'"
+        class="close-button">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Navigation Items -->
+    <mat-nav-list class="nav-list">
+      <a mat-list-item 
+         *ngFor="let item of navItems" 
+         [routerLink]="item.route"
+         routerLinkActive="active"
+         (click)="onNavItemClick()"
+         class="nav-item">
+        <mat-icon matListItemIcon class="nav-icon">{{ item.icon }}</mat-icon>
+        <span matListItemTitle class="nav-text">{{ item.name }}</span>
+      </a>
+    </mat-nav-list>
+
+    <mat-divider></mat-divider>
+
+    <!-- User Items -->
+    <mat-nav-list class="user-list">
+      <a mat-list-item 
+         *ngFor="let item of userItems" 
+         [routerLink]="item.route"
+         routerLinkActive="active"
+         (click)="onNavItemClick()"
+         class="user-item">
+        <mat-icon matListItemIcon class="user-icon">{{ item.icon }}</mat-icon>
+        <span matListItemTitle class="user-text">{{ item.name }}</span>
+      </a>
+    </mat-nav-list>
+
+    <!-- Footer -->
+    <div class="sidenav-footer">
+      <mat-divider></mat-divider>
+      <div class="footer-content">
+        <p class="footer-text">© 2024 Blog Platform</p>
+        <p class="footer-version">v1.0.0</p>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content Area -->
+  <mat-sidenav-content class="main-content">
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>
