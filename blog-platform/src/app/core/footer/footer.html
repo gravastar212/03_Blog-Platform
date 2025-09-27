@@ -1,0 +1,31 @@
+<mat-toolbar color="primary" class="footer">
+  <div class="footer-content">
+    <!-- Navigation Links -->
+    <div class="footer-links">
+      @for (link of footerLinks; track link.name) {
+        <a mat-button [routerLink]="link.route" class="footer-link">
+          <mat-icon>{{ link.icon }}</mat-icon>
+          <span class="link-text">{{ link.name }}</span>
+        </a>
+      }
+    </div>
+
+    <!-- Social Media Links -->
+    <!-- <div class="social-links">
+      @for (social of socialLinks; track social.name) {
+        <button 
+          mat-icon-button 
+          [attr.aria-label]="social.ariaLabel"
+          (click)="onExternalLink(social.url)"
+          class="social-button">
+          <mat-icon>{{ social.icon }}</mat-icon>
+        </button>
+      }
+    </div> -->
+
+    <!-- Copyright -->
+    <div class="copyright">
+      <span>&copy; {{ currentYear }} Blog Platform. All rights reserved.</span>
+    </div>
+  </div>
+</mat-toolbar>

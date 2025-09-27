@@ -3,7 +3,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -35,16 +35,17 @@ export class Navbar {
 
   isLoggedIn = false; // This would be connected to auth service later
 
+  constructor(private router: Router) {}
+
   onLogin(): void {
-    // Navigate to login page
-    console.log('Navigate to login');
+    this.router.navigate(['/auth/login']);
   }
 
   handleUserAction(item: any): void {
     if (item.action === 'logout') {
       console.log('Logout user');
     } else if (item.route) {
-      console.log('Navigate to:', item.route);
+      this.router.navigate([item.route]);
     }
   }
 }
