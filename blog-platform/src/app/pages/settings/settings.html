@@ -55,11 +55,15 @@
             <div class="form-actions">
               <button mat-raised-button color="primary" type="submit" [disabled]="settingsForm.invalid || isLoading">
                 @if (isLoading) {
-                  <mat-icon class="spinning">refresh</mat-icon>
-                  Updating...
+                  <ng-container>
+                    <mat-icon class="spinning">refresh</mat-icon>
+                    Updating...
+                  </ng-container>
                 } @else {
-                  <mat-icon>save</mat-icon>
-                  Save Changes
+                  <ng-container>
+                    <mat-icon>save</mat-icon>
+                    Save Changes
+                  </ng-container>
                 }
               </button>
             </div>

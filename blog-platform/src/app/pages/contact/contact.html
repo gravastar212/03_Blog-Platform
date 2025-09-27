@@ -87,11 +87,15 @@
 
             <button mat-raised-button color="primary" type="submit" class="submit-button" [disabled]="contactForm.invalid || isLoading">
               @if (isLoading) {
-                <mat-icon class="spinning">refresh</mat-icon>
-                Sending...
+                <ng-container>
+                  <mat-icon class="spinning">refresh</mat-icon>
+                  Sending...
+                </ng-container>
               } @else {
-                <mat-icon>send</mat-icon>
-                Send Message
+                <ng-container>
+                  <mat-icon>send</mat-icon>
+                  Send Message
+                </ng-container>
               }
             </button>
           </form>
