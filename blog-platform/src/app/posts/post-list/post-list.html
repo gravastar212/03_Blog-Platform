@@ -1,0 +1,75 @@
+<div class="post-list-container">
+  <div class="header-section">
+    <h1>Latest Posts</h1>
+    <p class="subtitle">Discover amazing stories and insights from our community</p>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Loading posts...</p>
+    </div>
+  } @else if (error) {
+    <div class="error-container">
+      <mat-icon>error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="loadPosts()">
+        <mat-icon>refresh</mat-icon>
+        Try Again
+      </button>
+    </div>
+  } @else if (posts.length === 0) {
+    <div class="empty-container">
+      <mat-icon>article</mat-icon>
+      <h2>No posts yet</h2>
+      <p>Be the first to share your story!</p>
+    </div>
+  } @else {
+    <div class="posts-grid">
+      @for (post of posts; track post.id) {
+        <mat-card class="post-card">
+          <mat-card-header>
+            <mat-card-title class="post-title">{{ post.title }}</mat-card-title>
+            <mat-card-subtitle class="post-meta">
+              <span class="author">
+                <mat-icon>person</mat-icon>
+                {{ post.author.name }}
+              </span>
+              <span class="date">
+                <mat-icon>schedule</mat-icon>
+                {{ getTimeAgo(post.createdAt) }}
+              </span>
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="post-excerpt">{{ post.excerpt }}</p>
+            
+            @if (post.tags && post.tags.length > 0) {
+              <div class="post-tags">
+                @for (tag of post.tags; track tag) {
+                  <mat-chip>{{ tag }}</mat-chip>
+                }
+              </div>
+            }
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-raised-button color="primary" [routerLink]="['/posts', post.id]">
+              <mat-icon>read_more</mat-icon>
+              Read More
+            </button>
+            <button mat-button>
+              <mat-icon>favorite_border</mat-icon>
+              Like
+            </button>
+            <button mat-button>
+              <mat-icon>share</mat-icon>
+              Share
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

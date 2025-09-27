@@ -1,0 +1,101 @@
+<div class="post-detail-container">
+  @if (isLoading) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Loading post...</p>
+    </div>
+  } @else if (error) {
+    <div class="error-container">
+      <mat-icon>error</mat-icon>
+      <h2>Post Not Found</h2>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Posts
+      </button>
+    </div>
+  } @else if (post) {
+    <div class="post-content">
+      <!-- Post Header -->
+      <mat-card class="post-header-card">
+        <mat-card-content>
+          <button mat-button (click)="goBack()" class="back-button">
+            <mat-icon>arrow_back</mat-icon>
+            Back to Posts
+          </button>
+          
+          <h1 class="post-title">{{ post.title }}</h1>
+          
+          <div class="post-meta">
+            <div class="author-info">
+              <mat-icon>person</mat-icon>
+              <span>{{ post.author.name }}</span>
+            </div>
+            <div class="date-info">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ getTimeAgo(post.createdAt) }}</span>
+            </div>
+            @if (post.tags && post.tags.length > 0) {
+              <div class="tags-info">
+                <mat-icon>label</mat-icon>
+                <div class="tags">
+                  @for (tag of post.tags; track tag) {
+                    <mat-chip>{{ tag }}</mat-chip>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Post Content -->
+      <mat-card class="post-content-card">
+        <mat-card-content>
+          <div class="post-body" [innerHTML]="post.content"></div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Post Actions -->
+      <mat-card class="post-actions-card">
+        <mat-card-content>
+          <div class="actions">
+            <button mat-raised-button color="primary">
+              <mat-icon>favorite</mat-icon>
+              Like
+            </button>
+            <button mat-button>
+              <mat-icon>share</mat-icon>
+              Share
+            </button>
+            <button mat-button>
+              <mat-icon>bookmark_border</mat-icon>
+              Save
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Comments Section -->
+      <mat-card class="comments-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>comment</mat-icon>
+            Comments (0)
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="comments-placeholder">
+            <mat-icon>chat_bubble_outline</mat-icon>
+            <h3>No comments yet</h3>
+            <p>Be the first to share your thoughts on this post!</p>
+            <button mat-raised-button color="primary">
+              <mat-icon>add_comment</mat-icon>
+              Add Comment
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>
