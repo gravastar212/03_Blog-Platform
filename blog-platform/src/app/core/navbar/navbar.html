@@ -21,12 +21,15 @@
       </button>
     }
 
-    <!-- User Menu (when logged in) -->
-    @if (isLoggedIn) {
-      <div class="user-menu">
-        <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-button">
-          <mat-icon>account_circle</mat-icon>
-        </button>
+        <!-- User Menu (when logged in) -->
+        @if (isLoggedIn) {
+          <div class="user-menu">
+            <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+              <mat-icon>account_circle</mat-icon>
+              @if (currentUser) {
+                <span class="user-name">{{ currentUser.name }}</span>
+              }
+            </button>
 
         <mat-menu #userMenu="matMenu" class="user-dropdown">
           <!-- Menu Items -->

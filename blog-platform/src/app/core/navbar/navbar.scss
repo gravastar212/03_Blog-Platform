@@ -60,6 +60,14 @@
 .user-menu {
   .user-button {
     color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    .user-name {
+      font-size: 0.9em;
+      font-weight: 500;
+    }
   }
 }
 

@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule, Router } from '@angular/router';
+import { Auth, User } from '../../auth/auth';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   imports: [
+    CommonModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
@@ -17,7 +21,7 @@ import { RouterModule, Router } from '@angular/router';
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
-export class Navbar {
+export class Navbar implements OnInit, OnDestroy {
   title = 'Blog Platform';
   
   navItems = [
@@ -33,9 +37,33 @@ export class Navbar {
     { name: 'Logout', icon: 'logout', action: 'logout' }
   ];
 
-  isLoggedIn = false; // This would be connected to auth service later
+  isLoggedIn = false;
+  currentUser: User | null = null;
+  private authSubscription: Subscription = new Subscription();
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: Auth
+  ) {}
+
+  ngOnInit(): void {
+    // Subscribe to authentication state changes
+    this.authSubscription.add(
+      this.authService.isAuthenticated$.subscribe(isAuthenticated => {
+        this.isLoggedIn = isAuthenticated;
+      })
+    );
+
+    this.authSubscription.add(
+      this.authService.currentUser$.subscribe(user => {
+        this.currentUser = user;
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.authSubscription.unsubscribe();
+  }
 
   onLogin(): void {
     this.router.navigate(['/auth/login']);
@@ -43,7 +71,8 @@ export class Navbar {
 
   handleUserAction(item: any): void {
     if (item.action === 'logout') {
-      console.log('Logout user');
+      this.authService.logout();
+      this.router.navigate(['/auth/login']);
     } else if (item.route) {
       this.router.navigate([item.route]);
     }

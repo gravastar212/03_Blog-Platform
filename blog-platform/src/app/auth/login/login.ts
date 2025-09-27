@@ -6,7 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { Auth, LoginRequest } from '../auth';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,11 @@ export class Login {
   hidePassword = true;
   isLoading = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: Auth,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -38,15 +43,22 @@ export class Login {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading = true;
-      const { email, password } = this.loginForm.value;
-      
-      console.log('Login attempt:', { email, password });
-      
-      // Simulate API call
-      setTimeout(() => {
-        this.isLoading = false;
-        console.log('Login successful');
-      }, 2000);
+      const loginData: LoginRequest = this.loginForm.value;
+
+      this.authService.login(loginData).subscribe({
+        next: (response) => {
+          console.log('Login successful:', response);
+          this.isLoading = false;
+          // Navigate to posts page after successful login
+          this.router.navigate(['/posts']);
+        },
+        error: (error) => {
+          console.error('Login failed:', error);
+          this.isLoading = false;
+          // Handle error - could show a snackbar or error message
+          alert('Login failed. Please check your credentials.');
+        }
+      });
     } else {
       this.markFormGroupTouched();
     }
