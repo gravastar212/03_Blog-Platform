@@ -1,0 +1,117 @@
+<div class="home-container">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <mat-card class="welcome-card">
+      <mat-card-header>
+        <mat-card-title class="welcome-title">
+          @if (currentUser) {
+            Welcome back, {{ currentUser.name }}! 👋
+          } @else {
+            Welcome to Blog Platform! 🚀
+          }
+        </mat-card-title>
+        <mat-card-subtitle class="welcome-subtitle">
+          @if (currentUser) {
+            Ready to share your thoughts with the world?
+          } @else {
+            Discover amazing stories and share your own
+          }
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="welcome-actions">
+          @if (currentUser) {
+            <button mat-raised-button color="primary" routerLink="/posts">
+              <mat-icon>article</mat-icon>
+              View Posts
+            </button>
+            <button mat-raised-button color="accent" routerLink="/profile">
+              <mat-icon>person</mat-icon>
+              My Profile
+            </button>
+          } @else {
+            <button mat-raised-button color="primary" routerLink="/auth/login">
+              <mat-icon>login</mat-icon>
+              Sign In
+            </button>
+            <button mat-raised-button color="accent" routerLink="/auth/register">
+              <mat-icon>person_add</mat-icon>
+              Sign Up
+            </button>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features-section">
+    <h2 class="section-title">What You Can Do</h2>
+    <mat-grid-list cols="3" rowHeight="200px" gutterSize="16px">
+      <mat-grid-tile>
+        <mat-card class="feature-card">
+          <mat-card-content>
+            <div class="feature-icon">
+              <mat-icon>article</mat-icon>
+            </div>
+            <h3>Write Posts</h3>
+            <p>Share your thoughts, experiences, and knowledge with our community.</p>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+      
+      <mat-grid-tile>
+        <mat-card class="feature-card">
+          <mat-card-content>
+            <div class="feature-icon">
+              <mat-icon>comment</mat-icon>
+            </div>
+            <h3>Engage</h3>
+            <p>Comment on posts, share feedback, and connect with other writers.</p>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+      
+      <mat-grid-tile>
+        <mat-card class="feature-card">
+          <mat-card-content>
+            <div class="feature-icon">
+              <mat-icon>people</mat-icon>
+            </div>
+            <h3>Community</h3>
+            <p>Join a vibrant community of writers, readers, and thinkers.</p>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="stats-section">
+    <mat-card class="stats-card">
+      <mat-card-header>
+        <mat-card-title>Platform Statistics</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number">1,234</div>
+            <div class="stat-label">Total Posts</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">5,678</div>
+            <div class="stat-label">Comments</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">890</div>
+            <div class="stat-label">Active Users</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">12</div>
+            <div class="stat-label">Categories</div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

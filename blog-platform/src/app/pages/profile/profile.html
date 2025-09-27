@@ -1,0 +1,87 @@
+<div class="profile-container">
+  @if (currentUser) {
+    <div class="profile-header">
+      <mat-card class="profile-card">
+        <mat-card-content>
+          <div class="profile-info">
+            <div class="avatar">
+              <mat-icon>account_circle</mat-icon>
+            </div>
+            <div class="user-details">
+              <h1>{{ currentUser.name }}</h1>
+              <p class="email">{{ currentUser.email }}</p>
+              <mat-chip [color]="currentUser.role === 'ADMIN' ? 'accent' : 'primary'" selected>
+                {{ currentUser.role }}
+              </mat-chip>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="profile-content">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Profile Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid">
+            <div class="info-item">
+              <mat-icon>person</mat-icon>
+              <div>
+                <h3>Full Name</h3>
+                <p>{{ currentUser.name }}</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <mat-icon>email</mat-icon>
+              <div>
+                <h3>Email Address</h3>
+                <p>{{ currentUser.email }}</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <mat-icon>admin_panel_settings</mat-icon>
+              <div>
+                <h3>Role</h3>
+                <p>{{ currentUser.role }}</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <mat-icon>calendar_today</mat-icon>
+              <div>
+                <h3>Member Since</h3>
+                <p>{{ currentUser.createdAt | date:'mediumDate' }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <mat-divider></mat-divider>
+          
+          <div class="profile-actions">
+            <button mat-raised-button color="primary" routerLink="/settings">
+              <mat-icon>settings</mat-icon>
+              Edit Profile
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  } @else {
+    <div class="not-authenticated">
+      <mat-card>
+        <mat-card-content>
+          <div class="auth-prompt">
+            <mat-icon>person_off</mat-icon>
+            <h2>Please Sign In</h2>
+            <p>You need to be logged in to view your profile.</p>
+            <button mat-raised-button color="primary" routerLink="/auth/login">
+              <mat-icon>login</mat-icon>
+              Sign In
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

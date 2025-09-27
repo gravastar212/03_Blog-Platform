@@ -1,0 +1,168 @@
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.welcome-section {
+  margin-bottom: 48px;
+
+  .welcome-card {
+    text-align: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    
+    .welcome-title {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    
+    .welcome-subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 32px;
+    }
+    
+    .welcome-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      
+      button {
+        padding: 12px 24px;
+        font-size: 1.1rem;
+        
+        .mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
+
+.features-section {
+  margin-bottom: 48px;
+  
+  .section-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 32px;
+    color: #333;
+  }
+  
+  .feature-card {
+    height: 100%;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .feature-icon {
+      margin-bottom: 16px;
+      
+      .mat-icon {
+        font-size: 3rem;
+        width: 3rem;
+        height: 3rem;
+        color: #3f51b5;
+      }
+    }
+    
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #333;
+    }
+    
+    p {
+      color: #666;
+      line-height: 1.6;
+    }
+  }
+}
+
+.stats-section {
+  .stats-card {
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+      padding: 24px 0;
+      
+      .stat-item {
+        text-align: center;
+        
+        .stat-number {
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: #3f51b5;
+          margin-bottom: 8px;
+        }
+        
+        .stat-label {
+          font-size: 1rem;
+          color: #666;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .home-container {
+    padding: 16px;
+  }
+  
+  .welcome-section {
+    .welcome-card {
+      .welcome-title {
+        font-size: 2rem;
+      }
+      
+      .welcome-subtitle {
+        font-size: 1rem;
+      }
+      
+      .welcome-actions {
+        flex-direction: column;
+        align-items: center;
+        
+        button {
+          width: 100%;
+          max-width: 300px;
+        }
+      }
+    }
+  }
+  
+  .features-section {
+    .section-title {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .stats-section {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-section {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
