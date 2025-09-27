@@ -4,7 +4,41 @@
     <p class="subtitle">Discover amazing stories and insights from our community</p>
   </div>
 
-  @if (isLoading) {
+  <!-- Search and Filter Bar -->
+  <mat-toolbar class="filter-toolbar">
+    <div class="filter-controls">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search posts</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          placeholder="Search by title or content..."
+          autocomplete="off">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="status-field">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="statusFilter" (selectionChange)="onStatusFilterChange()">
+          <mat-option value="">All Posts</mat-option>
+          <mat-option value="PUBLISHED">Published</mat-option>
+          <mat-option value="DRAFT">Draft</mat-option>
+          <mat-option value="ARCHIVED">Archived</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-icon-button
+        (click)="refreshPosts()"
+        matTooltip="Refresh posts"
+        class="refresh-button">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+
+  @if (loading) {
     <div class="loading-container">
       <mat-spinner></mat-spinner>
       <p>Loading posts...</p>
@@ -13,7 +47,7 @@
     <div class="error-container">
       <mat-icon>error</mat-icon>
       <p>{{ error }}</p>
-      <button mat-raised-button color="primary" (click)="loadPosts()">
+      <button mat-raised-button color="primary" (click)="refreshPosts()">
         <mat-icon>refresh</mat-icon>
         Try Again
       </button>
@@ -21,8 +55,13 @@
   } @else if (posts.length === 0) {
     <div class="empty-container">
       <mat-icon>article</mat-icon>
-      <h2>No posts yet</h2>
-      <p>Be the first to share your story!</p>
+      <h2>No posts found</h2>
+      <p>Try adjusting your search criteria or check back later for new content.</p>
+      @if (searchTerm || statusFilter) {
+        <button mat-raised-button color="primary" (click)="refreshPosts()">
+          Clear Filters
+        </button>
+      }
     </div>
   } @else {
     <div class="posts-grid">
@@ -33,7 +72,7 @@
             <mat-card-subtitle class="post-meta">
               <span class="author">
                 <mat-icon>person</mat-icon>
-                {{ post.author.name }}
+                {{ post.author?.name || 'Unknown Author' }}
               </span>
               <span class="date">
                 <mat-icon>schedule</mat-icon>
@@ -45,13 +84,11 @@
           <mat-card-content>
             <p class="post-excerpt">{{ post.excerpt }}</p>
             
-            @if (post.tags && post.tags.length > 0) {
-              <div class="post-tags">
-                @for (tag of post.tags; track tag) {
-                  <mat-chip>{{ tag }}</mat-chip>
-                }
-              </div>
-            }
+            <div class="post-meta-bottom">
+              <mat-chip [color]="getStatusColor(post.status)" selected>
+                {{ post.status }}
+              </mat-chip>
+            </div>
           </mat-card-content>
 
           <mat-card-actions>
@@ -71,5 +108,17 @@
         </mat-card>
       }
     </div>
+
+    <!-- Pagination -->
+    @if (totalPosts > pageSize) {
+      <mat-paginator
+        [length]="totalPosts"
+        [pageSize]="pageSize"
+        [pageIndex]="currentPage"
+        [pageSizeOptions]="[6, 12, 24]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    }
   }
 </div>

@@ -29,22 +29,17 @@
           <div class="post-meta">
             <div class="author-info">
               <mat-icon>person</mat-icon>
-              <span>{{ post.author.name }}</span>
+              <span>{{ post.author?.name || 'Unknown Author' }}</span>
             </div>
             <div class="date-info">
               <mat-icon>schedule</mat-icon>
               <span>{{ getTimeAgo(post.createdAt) }}</span>
             </div>
-            @if (post.tags && post.tags.length > 0) {
-              <div class="tags-info">
-                <mat-icon>label</mat-icon>
-                <div class="tags">
-                  @for (tag of post.tags; track tag) {
-                    <mat-chip>{{ tag }}</mat-chip>
-                  }
-                </div>
-              </div>
-            }
+            <div class="status-info">
+              <mat-chip [color]="getStatusColor(post.status)" selected>
+                {{ post.status }}
+              </mat-chip>
+            </div>
           </div>
         </mat-card-content>
       </mat-card>
@@ -81,19 +76,52 @@
         <mat-card-header>
           <mat-card-title>
             <mat-icon>comment</mat-icon>
-            Comments (0)
+            Comments ({{ comments.length }})
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div class="comments-placeholder">
-            <mat-icon>chat_bubble_outline</mat-icon>
-            <h3>No comments yet</h3>
-            <p>Be the first to share your thoughts on this post!</p>
-            <button mat-raised-button color="primary">
-              <mat-icon>add_comment</mat-icon>
-              Add Comment
-            </button>
-          </div>
+          @if (loadingComments) {
+            <div class="loading-comments">
+              <mat-spinner diameter="30"></mat-spinner>
+              <p>Loading comments...</p>
+            </div>
+          } @else if (commentsError) {
+            <div class="comments-error">
+              <mat-icon color="warn">error</mat-icon>
+              <p>{{ commentsError }}</p>
+            </div>
+          } @else if (comments.length === 0) {
+            <div class="comments-placeholder">
+              <mat-icon>chat_bubble_outline</mat-icon>
+              <h3>No comments yet</h3>
+              <p>Be the first to share your thoughts on this post!</p>
+              <button mat-raised-button color="primary">
+                <mat-icon>add_comment</mat-icon>
+                Add Comment
+              </button>
+            </div>
+          } @else {
+            <div class="comments-list">
+              @for (comment of comments; track comment.id) {
+                <div class="comment-item">
+                  <div class="comment-header">
+                    <div class="comment-author">
+                      <mat-icon>person</mat-icon>
+                      <span>{{ comment.author?.name || 'Anonymous' }}</span>
+                    </div>
+                    <div class="comment-date">
+                      <mat-icon>schedule</mat-icon>
+                      <span>{{ getTimeAgo(comment.createdAt) }}</span>
+                    </div>
+                  </div>
+                  <div class="comment-content">
+                    {{ comment.content }}
+                  </div>
+                </div>
+                <mat-divider></mat-divider>
+              }
+            </div>
+          }
         </mat-card-content>
       </mat-card>
     </div>
