@@ -1,22 +1,22 @@
-// .main-content {
-//   margin-top: 64px; // Account for fixed navbar height
-//   margin-bottom: 120px; // Account for fixed footer height
-//   min-height: calc(100vh - 184px); // Total height minus navbar and footer
-//   padding: 24px;
-// }
+.main-content {
+  margin-top: 64px; // Account for fixed navbar height
+  margin-bottom: 120px; // Account for fixed footer height
+  min-height: calc(100vh - 184px); // Total height minus navbar and footer
+  padding: 24px;
+}
 
-// // Responsive adjustments
-// @media (max-width: 768px) {
-//   .main-content {
-//     padding: 16px;
-//     margin-bottom: 100px; // Smaller footer height on mobile
-//     min-height: calc(100vh - 164px);
-//   }
-// }
+// Responsive adjustments
+@media (max-width: 768px) {
+  .main-content {
+    padding: 16px;
+    margin-bottom: 100px; // Smaller footer height on mobile
+    min-height: calc(100vh - 164px);
+  }
+}
 
-// @media (max-width: 480px) {
-//   .main-content {
-//     margin-bottom: 140px; // Account for stacked footer links on very small screens
-//     min-height: calc(100vh - 204px);
-//   }
-// }
+@media (max-width: 480px) {
+  .main-content {
+    margin-bottom: 140px; // Account for stacked footer links on very small screens
+    min-height: calc(100vh - 204px);
+  }
+}
